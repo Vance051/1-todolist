@@ -39,11 +39,14 @@ const TodoList: FC<TodoListPropsType> = (props) => {
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(event.currentTarget.value)
     }
+    const onKeyDownHandler = (event:React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {addTaskHandler()}
+    }
     return (
         <div className={todoClasses}>
             <h3>{props.title}</h3>
             <div>
-                <input value={newTitle} onChange={onChangeHandler}/>
+                <input value={newTitle} onChange={onChangeHandler} onKeyDown={onKeyDownHandler}/>
                 <button onClick={addTaskHandler}>Add new Task
                 </button>
             </div>
