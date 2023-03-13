@@ -45,15 +45,19 @@ const TodoList: FC<TodoListPropsType> = (props) => {
         }
     }
 
-    const allChangeFilterHandler = () => {
-        props.changeTodoListFilter('all')
+    // const allChangeFilterHandler = () => {
+    //     props.changeTodoListFilter('all')
+    // }
+    // const activeChangeFilterHandler = () => {
+    //     props.changeTodoListFilter('active')
+    // }
+    // const completedFilterHandler = () => {
+    //     props.changeTodoListFilter('completed')
+    // } функции для каждой кнопки отдельно
+    const universalChangeFilterHandler = (valueFilter:FilterValuesType) => {
+        props.changeTodoListFilter(valueFilter) // универсальная функция для всех кнопок
     }
-    const activeChangeFilterHandler = () => {
-        props.changeTodoListFilter('active')
-    }
-    const completedFilterHandler = () => {
-        props.changeTodoListFilter('completed')
-    }
+    
     return (
         <div className={todoClasses}>
             <h3>{props.title}</h3>
@@ -66,11 +70,13 @@ const TodoList: FC<TodoListPropsType> = (props) => {
                 {todoListItems}
             </ul>
             <div>
-                <button onClick={allChangeFilterHandler}>All
+                <button onClick={()=>universalChangeFilterHandler('all')}>All
                 </button>
-                <button onClick={activeChangeFilterHandler}>Active
+                {/*<button onClick={allChangeFilterHandler}>All*/}
+                {/*</button>*/}
+                <button onClick={()=>universalChangeFilterHandler('active')}>Active
                 </button>
-                <button onClick={completedFilterHandler}>Completed
+                <button onClick={()=>universalChangeFilterHandler('completed')}>Completed
                 </button>
             </div>
         </div>
