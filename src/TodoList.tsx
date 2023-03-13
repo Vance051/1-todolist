@@ -24,10 +24,12 @@ const TodoList: FC<TodoListPropsType> = (props) => {
     const todoClasses = isAllTaskIsMotDone ? "todolist-empty" : "todolist";
 
     const todoListItems: Array<JSX.Element> = props.tasks.map((task) => {
+        const onClickHandler = () => {
+            props.removeTasks(task.id) ///для  кнопки удаления в мапе
+        }
         return (<li key={task.id}>
             <input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
-            <button onClick={() =>
-                (props.removeTasks(task.id))}>Delete
+            <button onClick={onClickHandler}>Delete
             </button>
         </li>)
     }) // Array<JSX.Element>
