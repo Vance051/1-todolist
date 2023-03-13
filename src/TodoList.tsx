@@ -32,16 +32,18 @@ const TodoList: FC<TodoListPropsType> = (props) => {
         </li>)
     }) // Array<JSX.Element>
 
-
+const addTaskHandler = () => {
+    props.addTask(newTitle)
+    setNewTitle('')
+}
     return (
         <div className={todoClasses}>
             <h3>{props.title}</h3>
             <div>
                 <input value={newTitle}  onChange={(event)=>setNewTitle(event.currentTarget.value)}/>
-                <button onClick={() => {
-                    props.addTask(newTitle)
-                    setNewTitle('')
-                }}>Add new Task
+                <button onClick={() =>
+                    addTaskHandler()
+                }>Add new Task
                 </button>
             </div>
             <ul>
