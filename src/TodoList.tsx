@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {ChangeEvent, FC, useState} from 'react';
 import {FilterValuesType, TaskType} from "./App";
 
 
@@ -7,12 +7,12 @@ type TodoListPropsType = {
     tasks: Array<TaskType>
     removeTasks: (taskId: string) => void
     changeTodoListFilter: (filter: FilterValuesType) => void
-    addTask: (title:string) => void
+    addTask: (title: string) => void
 }
 
 
 const TodoList: FC<TodoListPropsType> = (props) => {
-    const [newTitle,setNewTitle] = useState('')
+    const [newTitle, setNewTitle] = useState('')
 
     let isAllTaskIsMotDone = true;
     for (let i = 0; i < props.tasks.length; i++) {
@@ -25,25 +25,26 @@ const TodoList: FC<TodoListPropsType> = (props) => {
 
     const todoListItems: Array<JSX.Element> = props.tasks.map((task) => {
         return (<li key={task.id}>
-            <input  type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
+            <input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
             <button onClick={() =>
                 (props.removeTasks(task.id))}>Delete
             </button>
         </li>)
     }) // Array<JSX.Element>
 
-const addTaskHandler = () => {
-    props.addTask(newTitle)
-    setNewTitle('')
-}
+    const addTaskHandler = () => {
+        props.addTask(newTitle)
+        setNewTitle('')
+    }
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        setNewTitle(event.currentTarget.value)
+    }
     return (
         <div className={todoClasses}>
             <h3>{props.title}</h3>
             <div>
-                <input value={newTitle}  onChange={(event)=>setNewTitle(event.currentTarget.value)}/>
-                <button onClick={() =>
-                    addTaskHandler()
-                }>Add new Task
+                <input value={newTitle} onChange={onChangeHandler}/>
+                <button onClick={addTaskHandler}>Add new Task
                 </button>
             </div>
             <ul>
