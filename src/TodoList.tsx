@@ -39,8 +39,20 @@ const TodoList: FC<TodoListPropsType> = (props) => {
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(event.currentTarget.value)
     }
-    const onKeyDownHandler = (event:React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {addTaskHandler()}
+    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            addTaskHandler()
+        }
+    }
+
+    const allChangeFilterHandler = () => {
+        props.changeTodoListFilter('all')
+    }
+    const activeChangeFilterHandler = () => {
+        props.changeTodoListFilter('active')
+    }
+    const completedFilterHandler = () => {
+        props.changeTodoListFilter('completed')
     }
     return (
         <div className={todoClasses}>
@@ -54,14 +66,11 @@ const TodoList: FC<TodoListPropsType> = (props) => {
                 {todoListItems}
             </ul>
             <div>
-                <button onClick={() =>
-                    (props.changeTodoListFilter('all'))}>All
+                <button onClick={allChangeFilterHandler}>All
                 </button>
-                <button onClick={() =>
-                    (props.changeTodoListFilter('active'))}>Active
+                <button onClick={activeChangeFilterHandler}>Active
                 </button>
-                <button onClick={() =>
-                    (props.changeTodoListFilter('completed'))}>Completed
+                <button onClick={completedFilterHandler}>Completed
                 </button>
             </div>
         </div>
