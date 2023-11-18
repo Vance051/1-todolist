@@ -19,9 +19,11 @@ export const TodoList: FC<PropsTodoList> = (
                 <button>+</button>
             </div>
             <ul>
-                {tasks.map((task) => (
-                    <li><input type="checkbox" checked={task.isDone}/> <span>{task.title}</span></li>))}
-
+                {tasks.length ? tasks.map((task) => (
+                    <li><input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
+                        <button>Delete</button>
+                    </li>
+                )) : <span>The list is empty</span>}
             </ul>
             <div>
                 {/*<button onClick={(event: React.MouseEvent<HTMLButtonElement>) => onClickHandler('All')}>All</button>*/}
