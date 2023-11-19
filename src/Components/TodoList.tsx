@@ -1,16 +1,25 @@
 import React, {FC} from "react";
-import {PropsTodoList} from "../App";
+import {FilterType, PropsTodoList} from "../App";
 import Button from "./Button";
 
 
 export const TodoList: FC<PropsTodoList> = (
-    {todoTitle, tasks}) => {
+    {todoTitle, tasks, removeTask, changeFilterValue}) => {
 
-    // const {todoTitle, tasks} = props
-    const ButtonFoo = (name: string) => {
-        console.log(`Its ${name}  Button`)
+    const removeTaskHandler = (taskId: number) => {
+        removeTask(taskId)
     }
 
+    const newFilter = (filter:FilterType) => {
+        changeFilterValue(filter)
+    }
+
+    const listItems: JSX.Element[] = tasks.map((task) => (
+        <li key={task.id}><input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
+            {/*<button onClick={(event: React.MouseEvent<HTMLButtonElement>) => removeTaskHandler(task.id)}>Delete</button>*/}
+            <Button name={'Del'} callBack={()=>removeTaskHandler(task.id)}/>
+        </li>
+    ))
     return (
         <div>
             <h3>{todoTitle}</h3>
@@ -18,24 +27,15 @@ export const TodoList: FC<PropsTodoList> = (
                 <input/>
                 <button>+</button>
             </div>
-            <ul>
-                {tasks.length ? tasks.map((task) => (
-                    <li><input type="checkbox" checked={task.isDone}/> <span>{task.title}</span>
-                        <button>Delete</button>
-                    </li>
-                )) : <span>The list is empty</span>}
-            </ul>
+            {tasks.length
+                ?
+                <ul>{listItems}</ul>
+                : <span>The list is empty</span>}
             <div>
-                {/*<button onClick={(event: React.MouseEvent<HTMLButtonElement>) => onClickHandler('All')}>All</button>*/}
-                {/*<button onClick={(event: React.MouseEvent<HTMLButtonElement>) => onClickHandler('Active')}>Active*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*    onClick={(event: React.MouseEvent<HTMLButtonElement>) => onClickHandler('Completed')}>Completed*/}
-                {/*</button>*/}
 
-                <Button callBack={() => ButtonFoo('All')} name={'All'}/>
-                <Button callBack={() => ButtonFoo("Active")} name={'Active'}/>
-                <Button callBack={() => ButtonFoo('Completed')} name={'Completed'}/>
+                <Button callBack={()=>newFilter('All')} name={'All'}/>
+                <Button callBack= {()=>newFilter("Active")} name={'Active'}/>
+                <Button callBack={()=>newFilter('Completed')} name={'Completed'}/>
 
             </div>
         </div>)
