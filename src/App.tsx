@@ -13,7 +13,8 @@ export type PropsTodoList = {
     tasks: TaskType[]
     removeTask: (taskId: string) => void
     changeFilterValue: (filter: FilterType) => void
-    addTask:(newTaskTitle:string)=>void
+    addTask: (newTaskTitle: string) => void
+    changeTaskStatus: (taskId:string, isDone:boolean)=>void
 
 }
 export type FilterType = 'All' | 'Active' | 'Completed'
@@ -27,22 +28,21 @@ function App() {
             {id: v1(), title: 'Js', isDone: false},
             {id: v1(), title: 'Js', isDone: true},
             {id: v1(), title: 'React', isDone: false},])
-
-    const addTask = (newTaskTitle:string) => {
+    const [filter, setFilter] = useState<FilterType>('All')
+    //Add new task
+    const addTask = (newTaskTitle: string) => {
         const newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
         const newTasks: TaskType[] = [newTask, ...tasks]
         setTasks(newTasks)
     }
-
-    const [filter, setFilter] = useState<FilterType>('All')
-
+    // name Task List
     const todoTitle1: string = 'What to learn'
-
+// Remove Task
     const removeTask = (taskId: string) => {
         const nextState: TaskType[] = tasks.filter(t => t.id !== taskId)
         setTasks(nextState)
     }
-
+// Change Filter value
     let taskForTodoList: TaskType[]
     switch (filter) {
         case "Active":
@@ -55,9 +55,17 @@ function App() {
             taskForTodoList = tasks
             break
     }
+    //Change Filter on 'all' | 'active' | 'complete'
     const changeFilterValue = (filter: FilterType) => {
         setFilter(filter)
     }
+
+
+    //upDate Task(isDone)
+    const changeTaskStatus = (taskId: string, isDone:boolean) => {
+        setTasks(tasks.map(t => t.id === taskId ? {...t, isDone: isDone} : t))
+    }
+
 
     //UI---------------------------------
     return (
@@ -68,6 +76,7 @@ function App() {
                 removeTask={removeTask}
                 changeFilterValue={changeFilterValue}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
             />
         </div>
     );

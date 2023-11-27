@@ -11,3 +11,34 @@
     background: lightgreen;
     border: black 2px solid;
 }
+
+
+.task {
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgb(255,255,0);
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.task-done {
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgb(255,0,255);
+    margin-bottom: 3px;
+
+}
+.list {
+    list-style: none;
+}
+
+
+.btn {
+    background: #563737;
+}
+
+.btn-active{
+    background: #dbee5d;
+}
