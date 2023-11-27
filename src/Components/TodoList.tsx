@@ -6,6 +6,7 @@ import Button from "./Button";
 export const TodoList: FC<PropsTodoList> = (
     {todoTitle, tasks, removeTask, changeFilterValue, addTask, changeTaskStatus}) => {
     const [newTaskTitle, setNewTaskTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
 
     const newFilter = (filter: FilterType) => {
         changeFilterValue(filter)
@@ -13,7 +14,7 @@ export const TodoList: FC<PropsTodoList> = (
 
 
     const taskList: JSX.Element[] = tasks.map((task) => {
-        const onChangeTaskStatus = (event: ChangeEvent<HTMLInputElement>) => {
+        const  onChangeTaskStatus = (event: ChangeEvent<HTMLInputElement>) => {
             changeTaskStatus(task.id, event.currentTarget.checked)
         }
         const removeTaskHandler = (taskId: string) => {
@@ -37,17 +38,22 @@ export const TodoList: FC<PropsTodoList> = (
     } // получаем текущее значение в инпуте и сетаем его
 
     const onClickToAddTaskHandler = () => {
+
         if (newTaskTitle.trim()) {
             addTask(newTaskTitle.trim())
             setNewTaskTitle('')
+
+        } else {
+            setError('Title is required')
+            setNewTaskTitle('')
+            // add an error is title isempty
         }
     } //сетаем тайтл вновую таску
 
     const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        console.log(event.currentTarget.value)
+         setError(null)
         if (event.key === 'Enter') {
-            addTask(newTaskTitle)
-            setNewTaskTitle('')
+            onClickToAddTaskHandler()
         }
     } //сетаем тайтл вновую таску
 
@@ -57,11 +63,13 @@ export const TodoList: FC<PropsTodoList> = (
     return (
         <div>
             <h3>{todoTitle}</h3>
+
             <div>
-                <input value={newTaskTitle}
+                <input className={error ? 'error' : ''} value={newTaskTitle}
                        onChange={onChangeTitleHandler}
                        onKeyDown={onKeyPressHandler}
                 />
+
                 {maxTitleLengthError && <div style={{color: 'red'}}>title is too long</div>}
                 <button
                     disabled={!newTaskTitle || maxTitleLengthError}
@@ -69,6 +77,7 @@ export const TodoList: FC<PropsTodoList> = (
 
                 >+
                 </button>
+                {error && <div className={error ? 'error-message' : ''}>{error}</div>}
             </div>
             {tasks.length //условный рендеринг
                 ?
