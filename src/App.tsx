@@ -15,6 +15,7 @@ export type PropsTodoList = {
     changeFilterValue: (filter: FilterType) => void
     addTask: (newTaskTitle: string) => void
     changeTaskStatus: (taskId:string, isDone:boolean)=>void
+    filter: FilterType
 
 }
 export type FilterType = 'All' | 'Active' | 'Completed'
@@ -77,6 +78,7 @@ function App() {
                 changeFilterValue={changeFilterValue}
                 addTask={addTask}
                 changeTaskStatus={changeTaskStatus}
+                filter={filter}
             />
         </div>
     );

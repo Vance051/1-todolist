@@ -3,8 +3,8 @@ import {FilterType, PropsTodoList} from "../App";
 import Button from "./Button";
 
 
-export const TodoList: FC<PropsTodoList> = (
-    {todoTitle, tasks, removeTask, changeFilterValue, addTask, changeTaskStatus}) => {
+export const TodoList: FC<PropsTodoList> = (props) => {
+   const {todoTitle, tasks, removeTask, changeFilterValue, addTask, changeTaskStatus, filter} = props
     const [newTaskTitle, setNewTaskTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -46,7 +46,7 @@ export const TodoList: FC<PropsTodoList> = (
         } else {
             setError('Title is required')
             setNewTaskTitle('')
-            // add an error is title isempty
+            // add an error is title is empty
         }
     } //сетаем тайтл вновую таску
 
@@ -85,9 +85,9 @@ export const TodoList: FC<PropsTodoList> = (
                 : <span>The list is empty</span>
             }
             <div>
-                <Button callBack={() => newFilter('All')} name={'All'}/>
-                <Button callBack={() => newFilter("Active")} name={'Active'}/>
-                <Button callBack={() => newFilter('Completed')} name={'Completed'}/>
+                <Button classes={filter==='All'? 'active-filter' :''} callBack={() => newFilter('All')} name={'All'}/>
+                <Button classes={filter==='Active'? 'active-filter' :''} callBack={() => newFilter("Active")} name={'Active'}/>
+                <Button classes={filter==='Completed'? 'active-filter' :''} callBack={() => newFilter('Completed')} name={'Completed'}/>
             </div>
         </div>)
 }
