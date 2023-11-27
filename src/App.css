@@ -28,17 +28,21 @@
     padding: 5px;
     background-color: rgb(255,0,255);
     margin-bottom: 3px;
+    opacity: 0.8;
 
 }
 .list {
     list-style: none;
 }
 
-
-.btn {
-    background: #563737;
+.error {
+    border: red 1px solid;
 }
 
-.btn-active{
-    background: #dbee5d;
+.error-message {
+    color: red;
 }
+.active-filter {
+    background-color: gold;
+}
+
