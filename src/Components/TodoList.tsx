@@ -18,7 +18,7 @@ export const TodoList: FC<PropsTodoList> = (props) => {
     const [newTaskTitle, setNewTaskTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
-    const newFilter = (todoListId: string, filter: FilterValuesType) => {
+    const changeFilterValueHadler = (todoListId: string, filter: FilterValuesType) => {
         changeFilterValue(todoListId, filter)
     }
 
@@ -75,10 +75,15 @@ export const TodoList: FC<PropsTodoList> = (props) => {
     }
     return (
         <div>
-            <h3>{todoTitle}</h3><Button name={'X'} callBack={() => removeTodoListHandler(todoListId)}/>
+            <h3>{todoTitle}</h3>
+            <Button
+                name={'X'}
+                callBack={() => removeTodoListHandler(todoListId)
+                }/>
 
             <div>
-                <input className={error ? 'error' : ''} value={newTaskTitle}
+                <input className={error ? 'error' : ''}
+                       value={newTaskTitle}
                        onChange={onChangeTitleHandler}
                        onKeyDown={onKeyPressHandler}
                 />
@@ -98,12 +103,15 @@ export const TodoList: FC<PropsTodoList> = (props) => {
                 : <span>The list is empty</span>
             }
             <div>
-                <Button classes={filter === 'All' ? 'active-filter' : ''} callBack={() => newFilter(todoListId, 'All')}
+                <Button classes={filter === 'All' ? 'active-filter' : ''}
+                        callBack={() => changeFilterValueHadler(todoListId, 'All')}
                         name={'All'}/>
                 <Button classes={filter === 'Active' ? 'active-filter' : ''}
-                        callBack={() => newFilter(todoListId, "Active")} name={'Active'}/>
+                        callBack={() => changeFilterValueHadler(todoListId, "Active")}
+                        name={'Active'}/>
                 <Button classes={filter === 'Completed' ? 'active-filter' : ''}
-                        callBack={() => newFilter(todoListId, 'Completed')} name={'Completed'}/>
+                        callBack={() => changeFilterValueHadler(todoListId, 'Completed')}
+                        name={'Completed'}/>
             </div>
         </div>)
 }
