@@ -1,10 +1,17 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
 import ButtonAppBar from "./ButtonAppBar";
 import {Container, Grid, Paper} from "@mui/material";
+import {
+    addTodolListAC,
+    changeTodoListFilterAC,
+    changeTodoListTitleAC,
+    removeTodolListAC,
+    todolistsReducer
+} from "./state/todolists-reducer";
 
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistType = {
@@ -39,11 +46,12 @@ function App() {
     }
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
-        let todolist = todoLists.find(tl => tl.id === todolistId);
-        if (todolist) {
-            todolist.filter = value;
-            setTodoLists([...todoLists])
-        }
+        // let todolist = todoLists.find(tl => tl.id === todolistId);
+        // if (todolist) {
+        //     todolist.filter = value;
+        //     setTodoLists([...todoLists])
+        // }
+        disPatchTodoLists(changeTodoListFilterAC(todolistId, value))
     }
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
@@ -73,32 +81,38 @@ function App() {
     }
 
     function removeTodolist(id: string) {
-        // засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
-        setTodoLists(todoLists.filter(tl => tl.id !== id));
-        // удалим таски для этого тудулиста из второго стейта, где мы храним отдельно таски
-        delete tasks[id]; // удаляем св-во из объекта... значением которого являлся массив тасок
-        // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-        setTasks({...tasks});
+        // // засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
+        // setTodoLists(todoLists.filter(tl => tl.id !== id));
+        // // удалим таски для этого тудулиста из второго стейта, где мы храним отдельно таски
+        // delete tasks[id]; // удаляем св-во из объекта... значением которого являлся массив тасок
+        // // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
+        // setTasks({...tasks});
+        disPatchTodoLists(removeTodolListAC(id))
     }
 
     function changeTodolistTitle(id: string, title: string) {
-        // найдём нужный todolist
-        const todolist = todoLists.find(tl => tl.id === id);
-        if (todolist) {
-            // если нашёлся - изменим ему заголовок
-            todolist.title = title;
-            setTodoLists([...todoLists]);
-        }
+        // // найдём нужный todolist
+        // const todolist = todoLists.find(tl => tl.id === id);
+        // if (todolist) {
+        //     // если нашёлся - изменим ему заголовок
+        //     todolist.title = title;
+        //     setTodoLists([...todoLists]);
+        // }
+        disPatchTodoLists(changeTodoListTitleAC(id, title))
+
     }
 
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-    let [todoLists, setTodoLists] = useState<Array<TodolistType>>([
+    // let [todoLists, setTodoLists] = useState<Array<TodolistType>>([
+    //     {id: todolistId1, title: "What to learn", filter: "all"},
+    //     {id: todolistId2, title: "What to buy", filter: "all"}
+    // ])
+    let [state, disPatchTodoLists] = useReducer(todolistsReducer, [
         {id: todolistId1, title: "What to learn", filter: "all"},
         {id: todolistId2, title: "What to buy", filter: "all"}
     ])
-
 
     let [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
@@ -113,8 +127,13 @@ function App() {
 
     function addTodolist(title: string) {
         let newTodolistId = v1();
-        let newTodolist: TodolistType = {id: newTodolistId, title: title, filter: 'all'};
-        setTodoLists([newTodolist, ...todoLists]);
+        // let newTodolist: TodolistType = {id: newTodolistId, title: title, filter: 'all'};
+        // setTodoLists([newTodolist, ...todoLists]);
+        // setTasks({
+        //     ...tasks,
+        //     [newTodolistId]: []
+        // })
+        disPatchTodoLists(addTodolListAC(newTodolistId,title))
         setTasks({
             ...tasks,
             [newTodolistId]: []
@@ -132,7 +151,7 @@ function App() {
                 </Grid>
                 <Grid container spacing={3}>
                     {
-                        todoLists.map(tl => {
+                        state.map(tl => {
                             let allTodolistTasks = tasks[tl.id];
                             let tasksForTodolist = allTodolistTasks;
 
