@@ -5,7 +5,8 @@ import {EditableSpan} from './EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
-import Checkbox from '@mui/material/Checkbox';
+import {CheckBoxComponent} from "./components/CheckBox";
+import {Grid} from "@mui/material";
 
 export type TaskType = {
     id: string
@@ -43,6 +44,12 @@ export function Todolist(props: PropsType) {
     const onActiveClickHandler = () => props.changeFilter("active", props.id);
     const onCompletedClickHandler = () => props.changeFilter("completed", props.id);
 
+    const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
+        let newIsDoneValue = e.currentTarget.checked;
+        props.changeTaskStatus(id, newIsDoneValue, props.id);
+    }
+
+
     return <div>
         <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}/>
             <IconButton onClick={removeTodolist} aria-label="delete">
@@ -54,21 +61,29 @@ export function Todolist(props: PropsType) {
             {
                 props.tasks.map(t => {
                     const onClickHandler = () => props.removeTask(t.id, props.id)
-                    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                        let newIsDoneValue = e.currentTarget.checked;
-                        props.changeTaskStatus(t.id, newIsDoneValue, props.id);
-                    }
+
                     const onTitleChangeHandler = (newValue: string) => {
                         props.changeTaskTitle(t.id, newValue, props.id);
                     }
 
 
-                    return <li key={t.id} className={t.isDone ? "is-done" : ""}>
-                        <Checkbox onChange={onChangeHandler} checked={t.isDone} size={'small'} color={'primary'}/>
-                        <EditableSpan value={t.title} onChange={onTitleChangeHandler}/>
-                        <IconButton onClick={onClickHandler} aria-label="delete">
-                            <DeleteIcon/>
-                        </IconButton>
+                    return <li style={{listStyleType: "none"}} key={t.id} className={t.isDone ? "is-done" : ""}>
+                        <Grid container>
+                            <Grid item>
+                                <CheckBoxComponent
+                                    callBack={(e) => onChangeStatusHandler(e, t.id)}
+                                    isDone={t.isDone}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <EditableSpan value={t.title} onChange={onTitleChangeHandler}/>
+                            </Grid>
+                            <Grid item>
+                                <IconButton onClick={onClickHandler} aria-label="delete">
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </Grid>
+                        </Grid>
                     </li>
                 })
             }
